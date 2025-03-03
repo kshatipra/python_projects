@@ -64,5 +64,3 @@ print(mySentence.rstrip())
 
 print(mySentence.lstrip())
 
-
-
