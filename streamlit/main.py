@@ -4,17 +4,18 @@ import sys
 import pandas as pd
 import numpy as np
 
+table = pd.DataFrame({"Column 1": [1, 2, 3, 4, 5, 6,7 ], "Column 2":[11, 12, 13, 14, 15, 16, 17]})
 #For Title of the App
-st.title("Create a Title like me using st.title()") 
+st.title("1. Create a Title like me using st.title()") 
 
 #For subheaders
-st.header("Make a header like me using st.header()") 
+st.header("2. Make a header like me using st.header()") 
 
 #For headers ( smaller than Title, bigger than subheader) 
-st.subheader("Hi I am a subheader, made using st.subheader()")
+st.subheader("3. Hi I am a subheader, made using st.subheader()")
 
 #For writing paragraphs
-st.text("Hi I am a text function")
+st.text("4. Hi I am a text function")
 
 #passing command line arguments using [--script args] and the streamlit urn function
 st.write("Command-line arguments passed to the script at the run:")
@@ -50,7 +51,7 @@ dataframe = pd.DataFrame(
 st.dataframe(dataframe.style.highlight_max(axis=0))
 
 #same thing with st.table() method, observe differences, it doesnt fit the content in the cell like st.dataframe. 
-st.write("4. Same as above using st.table() :)")
+st.write("5. Same as above using st.table() :)")
 dataframe = pd.DataFrame(
     np.random.randn(10, 20),
     columns=('col %d' %i for i in range(20))
@@ -59,5 +60,28 @@ st.table(dataframe)
 
 #markdown text
 
-st.markdown("**Hello** World! I am a markdown text!:)s")
+st.markdown("6. #Hello World! I am a markdown text!:)s")
+st.markdown("---") # draws line horizontal
+st.markdown("[Google](https://www.google.de)")
+st.caption("Hi I am Caption") #generates caption
 
+st.subheader("7. I am a generating latex matrix")
+st.latex(r"\begin{pmatrix}a&b\\c&b\end{pmatrix}")
+
+#json file
+st.subheader("8. I am a json file")
+json = {"a":"1, 2 ,3" , "b":" 4, 5, 6"}
+st.json(json)
+
+#code
+st.subheader("9. I am a Code")
+code = """
+print("hello world)
+def func():
+    print("I am a function")"""
+st.code(code, language="python")
+st.write("## H2")
+st.metric(label = "Wind speed", value = "120ms\^-1", delta = "-1.4ms-1")
+
+st.table(table)
+st.dataframe(table)
