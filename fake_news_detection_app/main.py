@@ -45,10 +45,14 @@ df['content'] = df['content'].apply(clean_text)
 #define stop words
 stop_words = stopwords.words('english')
 
-#split into train/test
+#split into train/test(training data (X) and training labels(y))
+#train on 80% of the data and test on 20%(surprise)
 X_train, X_test, y_train, y_test = train_test_split(df['content'], df['label'], test_size=0.2, random_state=42)
 
-#TF-IDF Vectorizer
+"""TF-IDF Vectorizer-- adding weights to words based on their frequency in the document and across the corpus
+#This helps in reducing the impact of common words and highlighting more informative words
+#stop_words are words that are filtered out before or after processing the text
+#max_df=0.7 means that words that appear in more than 70% of the documents will be ignored"""
 vectorizer = TfidfVectorizer(stop_words=stop_words, max_df  =0.7)
 
 #Fit and transform the training data
