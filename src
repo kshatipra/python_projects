@@ -1,0 +1,644 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyP2IiP79faR+JYQXRNT3trV",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/kshatipra/python_projects/blob/main/src\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd #-->data preprocessing, columns, rows, dataframes..\n",
+        "import numpy as np  #numpy--mathemtical\n",
+        "import sklearn as sk\n",
+        "import matplotlib as mp"
+      ],
+      "metadata": {
+        "id": "_4ud6xDlzdaT"
+      },
+      "execution_count": 28,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "url = 'https://raw.githubusercontent.com/lutzhamel/fake-news/master/data/fake_or_real_news.csv'\n",
+        "df = pd.read_csv(url) #df\n",
+        "df.head()\n",
+        "df.shape\n",
+        "df.columns\n",
+        "\n",
+        "df['label'].value_counts() #each label- how many times it was used in the data.\n",
+        "df.isnull().sum()\n",
+        "df['text']\n",
+        "df['label']"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 453
+        },
+        "collapsed": true,
+        "id": "r1mGBlutB_RY",
+        "outputId": "338068e8-c46f-4846-ab17-381d31c457d1"
+      },
+      "execution_count": 54,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0       FAKE\n",
+              "1       FAKE\n",
+              "2       REAL\n",
+              "3       FAKE\n",
+              "4       REAL\n",
+              "        ... \n",
+              "6330    REAL\n",
+              "6331    FAKE\n",
+              "6332    FAKE\n",
+              "6333    REAL\n",
+              "6334    REAL\n",
+              "Name: label, Length: 6335, dtype: object"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>label</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>FAKE</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>FAKE</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>REAL</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>FAKE</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>REAL</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6330</th>\n",
+              "      <td>REAL</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6331</th>\n",
+              "      <td>FAKE</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6332</th>\n",
+              "      <td>FAKE</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6333</th>\n",
+              "      <td>REAL</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6334</th>\n",
+              "      <td>REAL</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>6335 rows × 1 columns</p>\n",
+              "</div><br><label><b>dtype:</b> object</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 54
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data = {\n",
+        "    \"id\" : [1, 2, 3, 4],\n",
+        "    \"name\": ['abby','bob', 'catty',None],\n",
+        "    \"adress\":[None, None,'qre344','123sfg']\n",
+        "}\n",
+        "\n",
+        "df_new = pd.DataFrame(data)\n",
+        "df_new.isnull().sum()\n",
+        "df_new = df_new.fillna('unknown')\n",
+        "print(df_new)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "collapsed": true,
+        "id": "iPXT-bBRLXdA",
+        "outputId": "4c24c537-76bc-47fe-e478-79c69339fb47"
+      },
+      "execution_count": 65,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "   id     name   adress\n",
+            "0   1     abby  unknown\n",
+            "1   2      bob  unknown\n",
+            "2   3    catty   qre344\n",
+            "3   4  unknown   123sfg\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "label_encoded = {'FAKE':0, 'REAL':1}\n",
+        "df[\"label_encoded\"] = df[\"label\"].map(label_encoded)\n",
+        "df['label_encoded'].value_counts()\n",
+        "#df['label_encoded'] = label_encoded - not possible, given label_encoded say is a list. The column length must be exactly same as all other columns\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 176
+        },
+        "collapsed": true,
+        "id": "q50d_PsNNUSR",
+        "outputId": "037189d5-4a06-4a11-b39c-35ceaab94501"
+      },
+      "execution_count": 63,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "label_encoded\n",
+              "1    3171\n",
+              "0    3164\n",
+              "Name: count, dtype: int64"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>count</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>label_encoded</th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>3171</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>3164</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div><br><label><b>dtype:</b> int64</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 63
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "X = df['text']\n",
+        "Y = df['label_encoded']\n",
+        "display(X)\n",
+        "print(X.shape)\n",
+        "print(Y.shape)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 487
+        },
+        "id": "A4SfNeppQ42s",
+        "outputId": "a5b9144c-80d6-483e-9585-a133c37e5d98"
+      },
+      "execution_count": 70,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "0       Daniel Greenfield, a Shillman Journalism Fello...\n",
+              "1       Google Pinterest Digg Linkedin Reddit Stumbleu...\n",
+              "2       U.S. Secretary of State John F. Kerry said Mon...\n",
+              "3       — Kaydee King (@KaydeeKing) November 9, 2016 T...\n",
+              "4       It's primary day in New York and front-runners...\n",
+              "                              ...                        \n",
+              "6330    The State Department told the Republican Natio...\n",
+              "6331    The ‘P’ in PBS Should Stand for ‘Plutocratic’ ...\n",
+              "6332     Anti-Trump Protesters Are Tools of the Oligar...\n",
+              "6333    ADDIS ABABA, Ethiopia —President Obama convene...\n",
+              "6334    Jeb Bush Is Suddenly Attacking Trump. Here's W...\n",
+              "Name: text, Length: 6335, dtype: object"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>text</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>Daniel Greenfield, a Shillman Journalism Fello...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>Google Pinterest Digg Linkedin Reddit Stumbleu...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>U.S. Secretary of State John F. Kerry said Mon...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>— Kaydee King (@KaydeeKing) November 9, 2016 T...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>It's primary day in New York and front-runners...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6330</th>\n",
+              "      <td>The State Department told the Republican Natio...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6331</th>\n",
+              "      <td>The ‘P’ in PBS Should Stand for ‘Plutocratic’ ...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6332</th>\n",
+              "      <td>Anti-Trump Protesters Are Tools of the Oligar...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6333</th>\n",
+              "      <td>ADDIS ABABA, Ethiopia —President Obama convene...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6334</th>\n",
+              "      <td>Jeb Bush Is Suddenly Attacking Trump. Here's W...</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>6335 rows × 1 columns</p>\n",
+              "</div><br><label><b>dtype:</b> object</label>"
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "(6335,)\n",
+            "(6335,)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.feature_extraction.text import TfidfVectorizer\n",
+        "tfidf = TfidfVectorizer()\n",
+        "X_tfidf = tfidf.fit_transform(X)\n",
+        "print(X_tfidf.shape)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "collapsed": true,
+        "id": "KKyiSJkUR8o8",
+        "outputId": "2d51ec2c-1bd5-4e46-e511-2e03af909855"
+      },
+      "execution_count": 73,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "(6335, 67659)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import train_test_split\n",
+        "X_train, X_test, Y_train, Y_test = train_test_split(X_tfidf, Y, test_size = 0.20, random_state = 42)\n",
+        "print(X_train)\n",
+        "print(X_test)\n",
+        "print(Y_train)\n",
+        "print(Y_test)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "collapsed": true,
+        "id": "NQvARasnWo89",
+        "outputId": "cdde6458-7f38-4a14-c3f7-0af0ab752335"
+      },
+      "execution_count": 74,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<Compressed Sparse Row sparse matrix of dtype 'float64'\n",
+            "\twith 1713334 stored elements and shape (5068, 67659)>\n",
+            "  Coords\tValues\n",
+            "  (0, 59827)\t0.059574168882317306\n",
+            "  (0, 30160)\t0.06212154920309762\n",
+            "  (0, 42528)\t0.12365500329478966\n",
+            "  (0, 23833)\t0.06551023895963834\n",
+            "  (0, 61553)\t0.11738523297883824\n",
+            "  (0, 42788)\t0.08542594172820236\n",
+            "  (0, 28494)\t0.08592688000570807\n",
+            "  (0, 20548)\t0.26270828215703834\n",
+            "  (0, 49300)\t0.1994429918958756\n",
+            "  (0, 18664)\t0.12819140767303283\n",
+            "  (0, 33453)\t0.17572531951484263\n",
+            "  (0, 53674)\t0.17388337974354412\n",
+            "  (0, 13737)\t0.16379800838461533\n",
+            "  (0, 29902)\t0.4068655691458213\n",
+            "  (0, 45810)\t0.2449820899090721\n",
+            "  (0, 50685)\t0.36389013241127305\n",
+            "  (0, 57645)\t0.2819665417982991\n",
+            "  (0, 32293)\t0.27208645730436676\n",
+            "  (0, 53869)\t0.30554542489858627\n",
+            "  (0, 47502)\t0.35568603368661705\n",
+            "  (1, 59827)\t0.047045516503059576\n",
+            "  (1, 31743)\t0.07769859277453753\n",
+            "  (1, 42775)\t0.02549131597391111\n",
+            "  (1, 30160)\t0.04905717399101508\n",
+            "  (1, 42528)\t0.07323744846968767\n",
+            "  :\t:\n",
+            "  (5067, 66364)\t0.052472580792767835\n",
+            "  (5067, 63683)\t0.051575212257160136\n",
+            "  (5067, 1614)\t0.0426926410561612\n",
+            "  (5067, 64783)\t0.05350851674086724\n",
+            "  (5067, 11385)\t0.051575212257160136\n",
+            "  (5067, 27460)\t0.04691706814472123\n",
+            "  (5067, 29146)\t0.05816666085330614\n",
+            "  (5067, 42284)\t0.0473507851686001\n",
+            "  (5067, 20586)\t0.06089150048203793\n",
+            "  (5067, 12144)\t0.1826745014461138\n",
+            "  (5067, 40140)\t0.06089150048203793\n",
+            "  (5067, 53215)\t0.04541748068489299\n",
+            "  (5067, 8415)\t0.045089597051597145\n",
+            "  (5067, 29603)\t0.23266664341322457\n",
+            "  (5067, 64784)\t0.06089150048203793\n",
+            "  (5067, 36704)\t0.06089150048203793\n",
+            "  (5067, 17792)\t0.052472580792767835\n",
+            "  (5067, 5037)\t0.04691706814472123\n",
+            "  (5067, 19852)\t0.06089150048203793\n",
+            "  (5067, 63505)\t0.06089150048203793\n",
+            "  (5067, 20292)\t0.06089150048203793\n",
+            "  (5067, 56211)\t0.051575212257160136\n",
+            "  (5067, 46705)\t0.051575212257160136\n",
+            "  (5067, 20537)\t0.10946753781954159\n",
+            "  (5067, 45799)\t0.05350851674086724\n",
+            "<Compressed Sparse Row sparse matrix of dtype 'float64'\n",
+            "\twith 444948 stored elements and shape (1267, 67659)>\n",
+            "  Coords\tValues\n",
+            "  (0, 5737)\t0.017081057199655254\n",
+            "  (0, 59827)\t0.3342071012317421\n",
+            "  (0, 31743)\t0.09199396453742477\n",
+            "  (0, 41252)\t0.0074266860811742635\n",
+            "  (0, 42775)\t0.005030222414540218\n",
+            "  (0, 30160)\t0.1452073893259317\n",
+            "  (0, 42528)\t0.29867479348242393\n",
+            "  (0, 19996)\t0.009907763758804531\n",
+            "  (0, 28373)\t0.018512811895916456\n",
+            "  (0, 12544)\t0.017847913654116192\n",
+            "  (0, 27517)\t0.01733576772298136\n",
+            "  (0, 60504)\t0.10430293540329706\n",
+            "  (0, 64851)\t0.011570285136765685\n",
+            "  (0, 65918)\t0.02689738270683329\n",
+            "  (0, 55750)\t0.05077714636609895\n",
+            "  (0, 60056)\t0.038774504171635665\n",
+            "  (0, 59817)\t0.07587380238208541\n",
+            "  (0, 31871)\t0.05354535933343706\n",
+            "  (0, 7183)\t0.061554323747776155\n",
+            "  (0, 10081)\t0.017777996451466438\n",
+            "  (0, 57284)\t0.029653187835512008\n",
+            "  (0, 23833)\t0.020417114287447486\n",
+            "  (0, 46170)\t0.028753644274063784\n",
+            "  (0, 65408)\t0.06183165414543102\n",
+            "  (0, 4296)\t0.13448077476909825\n",
+            "  :\t:\n",
+            "  (1266, 52709)\t0.04674565313755764\n",
+            "  (1266, 58046)\t0.042847752639050815\n",
+            "  (1266, 6985)\t0.03598074940398243\n",
+            "  (1266, 27531)\t0.04859566115064012\n",
+            "  (1266, 10711)\t0.051203100997803994\n",
+            "  (1266, 2895)\t0.049353092984721514\n",
+            "  (1266, 23596)\t0.05826798870521423\n",
+            "  (1266, 38115)\t0.05826798870521423\n",
+            "  (1266, 30609)\t0.0431469106677726\n",
+            "  (1266, 20860)\t0.05381054084496788\n",
+            "  (1266, 66402)\t0.05826798870521423\n",
+            "  (1266, 9209)\t0.03868946280752624\n",
+            "  (1266, 27854)\t0.05826798870521423\n",
+            "  (1266, 40261)\t0.047918115287012654\n",
+            "  (1266, 57375)\t0.04859566115064012\n",
+            "  (1266, 4938)\t0.04129690265469012\n",
+            "  (1266, 11423)\t0.042847752639050815\n",
+            "  (1266, 28029)\t0.044505784069892765\n",
+            "  (1266, 10172)\t0.04623091946186194\n",
+            "  (1266, 29115)\t0.049353092984721514\n",
+            "  (1266, 4945)\t0.04379052116017984\n",
+            "  (1266, 52191)\t0.04674565313755764\n",
+            "  (1266, 27984)\t0.05381054084496788\n",
+            "  (1266, 36018)\t0.049353092984721514\n",
+            "  (1266, 27099)\t0.05381054084496788\n",
+            "1142    1\n",
+            "2654    0\n",
+            "5395    0\n",
+            "1170    0\n",
+            "4371    0\n",
+            "       ..\n",
+            "3772    1\n",
+            "5191    0\n",
+            "5226    0\n",
+            "5390    1\n",
+            "860     0\n",
+            "Name: label_encoded, Length: 5068, dtype: int64\n",
+            "1357    0\n",
+            "2080    0\n",
+            "2718    0\n",
+            "812     0\n",
+            "4886    0\n",
+            "       ..\n",
+            "1512    0\n",
+            "57      1\n",
+            "6092    1\n",
+            "3403    1\n",
+            "292     1\n",
+            "Name: label_encoded, Length: 1267, dtype: int64\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.linear_model import LogisticRegression\n",
+        "model  = LogisticRegression()\n",
+        "model.fit(X_train, Y_train)\n",
+        "print('Model Trained')\n",
+        "\n",
+        "Y_pred = model.predict(X_test)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "cLKAJ9cuYI18",
+        "outputId": "e694dc0b-80af-43a9-fbff-04272cee97c0"
+      },
+      "execution_count": 77,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Model Trained\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.metrics import accuracy_score, classification_report\n",
+        "print(accuracy_score(Y_test, Y_pred))\n",
+        "print(classification_report(Y_test, Y_pred))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "faTVMnUOY0Ua",
+        "outputId": "300f6190-5e2c-4021-9770-f20600e92f95"
+      },
+      "execution_count": 79,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.9155485398579322\n",
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.90      0.94      0.92       628\n",
+            "           1       0.94      0.89      0.91       639\n",
+            "\n",
+            "    accuracy                           0.92      1267\n",
+            "   macro avg       0.92      0.92      0.92      1267\n",
+            "weighted avg       0.92      0.92      0.92      1267\n",
+            "\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
